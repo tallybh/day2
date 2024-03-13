@@ -12,12 +12,33 @@ namespace day2.Services
 
         public Task<List<string>> GetDirectoriesAsync(string dirName)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(Directory.GetDirectories(dirName).ToList());
         }
 
-        public Task<List<MyFile>> GetFilesAsync(string dirName)
+        public async Task<List<MyFile>> GetFilesAsync(string dirName)
         {
-            throw new NotImplementedException();
+            await Task.Delay(1000);
+            var fileNames = Directory.GetFiles(dirName);
+
+            List<MyFile> files = new();
+            //var v  = new List<MyFile>();
+            // List<MyFile> v1 = new List<MyFile>();
+            MyFile myFile;
+            foreach (var file in fileNames)
+            {
+                var info = new FileInfo(file);
+                myFile = new MyFile
+                {
+                    Extension = info.Extension,
+                    ModificationDate = info.LastWriteTime,
+                    Path = info.Name,
+                    Size = info.Length
+                };
+                files.Add(myFile);
+            }
+
+            return files;
+
         }
     }
 }

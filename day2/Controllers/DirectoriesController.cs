@@ -27,9 +27,7 @@ namespace day2.Controllers
             {
                 return NotFound();
             }
-            await Task.Delay(1000);
-
-            var dirs = Directory.GetDirectories(dirName);
+            List<string>  dirs = await _repository.GetDirectoriesAsync(dirName);
             return Ok(dirs);
         }
 
@@ -43,22 +41,7 @@ namespace day2.Controllers
             {
                 return NotFound();
             }
-            await Task.Delay(1000);
-
-            var fileNames = Directory.GetFiles(dirName);
-
-            List<MyFile> files = new();
-            //var v  = new List<MyFile>();
-            // List<MyFile> v1 = new List<MyFile>();
-            MyFile myFile;
-            foreach(var file in fileNames)
-            {
-                var info = new FileInfo(file);
-                myFile = new MyFile { Extension = info.Extension , ModificationDate = info.LastWriteTime,
-                    Path = info.Name, Size = info.Length};
-                files.Add(myFile);
-
-            }
+            var files = await _repository.GetFilesAsync(dirName);
             return Ok(files);
         }
 
